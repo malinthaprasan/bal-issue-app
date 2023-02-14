@@ -1,50 +1,42 @@
 import ballerina/http;
+import ballerina/uuid;
 
-map<Issue> issues = {};
-int id_count= 1;
+table<Issue> key(id) issuesTable = table[];
 
 # A service representing a network-accessible API
 # bound to port `9090`.
 service / on new http:Listener(9090) {
 
     resource function get issues() returns Issue[]|error {
-        string[] issueList = issues.keys();
-        Issue[] response = [];
 
-        foreach var issue in issueList {
-            response.push(issues.get(issue));
+        Issue[] response = [];
+        foreach var issue in issuesTable {
+            response.push(issue);
         }
         return response;
     }
 
     resource function post issues(@http:Payload Name payload) returns Issue|error {
+        
+        string uuid = uuid:createType4AsString();
         Issue issue= {
-            id: id_count.toBalString(),
+            id: uuid,
             name: payload.name,
-            status: "Open"
+            status: OPEN
         };
-
-        issues[id_count.toBalString()] = issue;
-        id_count += 1;
-
+        issuesTable.add(issue);
         return issue;
     }
 
     resource function patch issues/[string issueId](@http:Payload Status payload) returns Issue|http:NotFound|error {
         
-        if !issues.hasKey(issueId) {
+        if !issuesTable.hasKey(issueId) {
             return http:NOT_FOUND;
         }
         
-        string currentIssue =  issues.get(issueId).name;
-        Issue issue = {
-            id: issueId,
-            name: currentIssue,
-            status: payload.status
-        };
-
-        issues[issueId] = issue;
-
+        Issue issue = issuesTable.get(issueId);
+        issue.status = payload.status;
+        issuesTable.put(issue);
         return issue;
     }
 }
@@ -63,7 +55,7 @@ public type Name record {
 };
 
 public type Issue record {
-    string id;
+    readonly string id;
     string name;
     string status;
 };
