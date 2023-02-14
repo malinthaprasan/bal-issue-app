@@ -30,7 +30,12 @@ service / on new http:Listener(9090) {
         return issue;
     }
 
-    resource function patch issues/[string issueId](@http:Payload Status payload) returns Issue|error {
+    resource function patch issues/[string issueId](@http:Payload Status payload) returns Issue|http:NotFound|error {
+        
+        if !issues.hasKey(issueId) {
+            return http:NOT_FOUND;
+        }
+        
         string currentIssue =  issues.get(issueId).name;
         Issue issue = {
             id: issueId,
