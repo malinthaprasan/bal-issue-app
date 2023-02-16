@@ -2,9 +2,9 @@ A demo API to create issues and manage them
 
 API has three resource
 
-* POST /issues
-* GET /issues
-* PATCH /issues/{id}
+* **POST** /issues
+* **GET** /issues
+* **PATCH** /issues/{id}
 
 
 Samples Curl requests
