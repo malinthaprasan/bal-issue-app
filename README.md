@@ -22,7 +22,6 @@ curl --location --request POST 'https://74828fb8-83ac-4a82-b786-b6aa78b0bd5f-pro
 
 2. List Issues
 
-Request
 ```
 curl --location --request GET 'https://74828fb8-83ac-4a82-b786-b6aa78b0bd5f-prod.e1-us-east-azure.preview-dv.choreoapis.dev/oubo/issues-api/1.0.0/issues' \
 --header 'Authorization: Bearer <TokenWithRequiredScope>'
