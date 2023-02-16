@@ -1,4 +1,4 @@
-A demo API to create Github like issues and manage them
+A demo API to create issues and manage them
 
 API has three resource
 
